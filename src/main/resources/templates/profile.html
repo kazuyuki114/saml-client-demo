@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - SAML2 Client Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .btn { background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block; margin: 10px 5px; }
+        .btn:hover { background-color: #0056b3; }
+        .btn-danger { background-color: #dc3545; }
+        .btn-danger:hover { background-color: #c82333; }
+        h1 { color: #333; }
+        .section { background-color: #f8f9fa; padding: 20px; border-radius: 4px; margin: 20px 0; border-left: 4px solid #007bff; }
+        .detail { margin: 10px 0; padding: 10px; background-color: white; border-radius: 4px; }
+        .label { font-weight: bold; color: #495057; }
+        .value { color: #212529; margin-left: 10px; }
+        pre { background-color: #f1f1f1; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Profile</h1>
+        
+        <div class="section">
+            <h2>Basic Information</h2>
+            <div class="detail">
+                <span class="label">Name ID:</span>
+                <span class="value" th:text="${name}">User</span>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>SAML Attributes</h2>
+            <div th:if="${attributes != null and !attributes.isEmpty()}">
+                <div th:each="attr : ${attributes}" class="detail">
+                    <span class="label" th:text="${attr.key}">Attribute Name</span>:
+                    <div class="value">
+                        <span th:if="${attr.value.size() == 1}" th:text="${attr.value[0]}">Single Value</span>
+                        <ul th:if="${attr.value.size() > 1}">
+                            <li th:each="val : ${attr.value}" th:text="${val}">Multiple Values</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${attributes == null or attributes.isEmpty()}" class="detail">
+                <p>No attributes received from the Identity Provider.</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Session Information</h2>
+            <div class="detail">
+                <span class="label">Session Indexes:</span>
+                <div class="value">
+                    <span th:if="${sessionIndexes != null and !sessionIndexes.isEmpty()}" th:text="${sessionIndexes}">Session Indexes</span>
+                    <span th:if="${sessionIndexes == null or sessionIndexes.isEmpty()}">No session indexes available</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Principal Details (Debug)</h2>
+            <div class="detail">
+                <pre th:text="${principal}">Principal object details</pre>
+            </div>
+        </div>
+        
+        <div>
+            <a href="/dashboard" class="btn">Back to Dashboard</a>
+            <a href="/" class="btn">Home</a>
+            <a href="/logout" class="btn btn-danger">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

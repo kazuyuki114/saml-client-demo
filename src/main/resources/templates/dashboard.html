@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SAML2 Client Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .btn { background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block; margin: 10px 5px; }
+        .btn:hover { background-color: #0056b3; }
+        .btn-danger { background-color: #dc3545; }
+        .btn-danger:hover { background-color: #c82333; }
+        h1 { color: #333; }
+        .user-info { background-color: #e9ecef; padding: 15px; border-radius: 4px; margin: 20px 0; }
+        .attributes { background-color: #f8f9fa; padding: 15px; border-radius: 4px; margin: 20px 0; }
+        .attribute { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard</h1>
+        
+        <div class="user-info">
+            <h2>Welcome, <span th:text="${name}">User</span>!</h2>
+            <p>You have successfully authenticated via SAML2.</p>
+        </div>
+        
+        <div class="attributes">
+            <h3>SAML Attributes:</h3>
+            <div th:if="${attributes != null and !attributes.isEmpty()}">
+                <div th:each="attr : ${attributes}" class="attribute">
+                    <strong th:text="${attr.key}">Attribute Name</strong>: 
+                    <span th:text="${attr.value}">Attribute Value</span>
+                </div>
+            </div>
+            <div th:if="${attributes == null or attributes.isEmpty()}">
+                <p>No attributes received from the Identity Provider.</p>
+            </div>
+        </div>
+        
+        <div>
+            <a href="/profile" class="btn">View Full Profile</a>
+            <a href="/" class="btn">Home</a>
+            <a href="/logout" class="btn btn-danger">Logout</a>
+        </div>
+    </div>
+</body>
+</html>
