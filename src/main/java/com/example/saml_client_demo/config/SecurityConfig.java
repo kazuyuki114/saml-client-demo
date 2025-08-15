@@ -14,20 +14,21 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/home", "/error", "/login/saml2/**", "/saml2/**", "/debug").permitAll()
+                .requestMatchers("/", "/home", "/error", "/login/saml2/**", "/saml2/**", "/debug", "/logout").permitAll()
                 .anyRequest().authenticated()
             )
             .saml2Login(saml2 -> saml2
                 .defaultSuccessUrl("/dashboard", true)
             )
-            .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/login/saml2/**", "/saml2/**")
-            )
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("https://localhost:8080/cas/logout?service=http://localhost:8081/")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
+                .clearAuthentication(true)
+                .permitAll()
+            )
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/login/saml2/**", "/saml2/**", "/logout")
             );
 
         return http.build();

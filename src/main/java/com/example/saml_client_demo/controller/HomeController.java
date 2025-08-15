@@ -29,6 +29,8 @@ public class HomeController {
         model.addAttribute("sessionIndexes", principal.getSessionIndexes());
         return "profile";
     }
-
-
+    @GetMapping("/error")
+    public String error() {
+        return "error";
+    }
 }
